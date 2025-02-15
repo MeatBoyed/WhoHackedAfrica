@@ -6,6 +6,7 @@ use App\APIService;
 new class extends Component {
     public $attack;
 
+
     public function mount()
     {
         // $apiService = new APIService();
