@@ -11,13 +11,14 @@ use App\VictimModel;
 
 class APIService
 {
-    private $baseUrl = "http://localhost:8003/api/v1/attacks";
+    private $baseUrl = "http://localhost:8005/api/v1/attacks";
 
     public function getAttacks(string $countryCode): array
     {
         $url = "$this->baseUrl/$countryCode";
 
         try {
+            // TIME OUT ERRORS ON LONG REQUESTS - Try Retries
             $response = Http::get($url); // Fetch the Attacks in region
 
             if ($response->clientError()) {

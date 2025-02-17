@@ -29,6 +29,7 @@ async def get_attacks_by_country(
     raw_attacks = attacks_res.json()[:5] # Slice to get only first 10
 
     # Get Victim Data
+    # Some data loss occuring likely with the Victim - Gets 5 returns 3???
     attacks: List[AttackDetails] = []
     totalAffectedCustomers = 0
     totalAffectedEmployees = 0
@@ -57,8 +58,8 @@ async def get_attacks_by_country(
                     hacker_group="",
                     attack_summary=attack.get("summary", "N/A"),
                     screenshot="",
-                    victim=attack["title"],
-                    domain=attack["title"],
+                    victim=attack["victim"],
+                    domain=attack["domain"],
                     affected=affectedDetails
                 ))
                 continue
@@ -97,8 +98,8 @@ async def get_attacks_by_country(
                 hacker_group=victim_data.get("group", "Unknown"),
                 attack_summary=attack.get("summary", "N/A"),
                 screenshot=victim_data.get("screenshot", "N/A"),
-                victim=attack["title"],
-                domain=attack["title"],
+                victim=attack["victim"],
+                domain=attack["domain"],
                 affected=affectedDetails
             )
 

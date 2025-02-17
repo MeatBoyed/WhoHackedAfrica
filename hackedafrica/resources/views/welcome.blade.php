@@ -52,7 +52,7 @@
 
 <body class="bg-gray-800 text-gray-100 min-h-screen">
     <main class="flex justify-center items-center w-full">
-        <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <div class="container mx-auto px-4 py-8 max-w-5xl md:max-w-7xl">
             <!-- App Name Section -->
             <header class="text-center mb-12">
                 <h1 class="text-5xl font-bold text-yellow-400 font-mono">Who Hacked Africa</h1>

@@ -6,33 +6,81 @@ use App\APIService;
 new class extends Component {
 
     public $attacks;
+    public $attacksRes;
     public $errorMessage;
     public $countryCode = "ZA";
 
     public function mount()
     {
         $apiService = new APIService();
-        $this->attacks = $apiService->getAttacks($this->countryCode);
+        $this->attacksRes = $apiService->getAttacks($this->countryCode);
 
-        if (count($this->attacks) === 0) {
+        // dd($this->attacksRes);
+        // if (gettype($this->attacksRes) === null) {
+        if (count($this->attacksRes) === 0) {
             $this->errorMessage = "Oops! Your Country (" . $this->countryCode . ") could not be found. 404";
+            return;
         }
+        $this->attacks = $this->attacksRes['attacks'];
         // dump($this->attacks[0]);
-        dd($this->attacks);
+        // dd($this->attacks);
     }
 }; ?>
 
 <!-- Attack Cards Feed Section -->
-<section class="w-full">
-    <h2 class="text-2xl font-bold text-yellow-400 mb-4">Recent Cyber Attacks</h2>
+<section class="w-full flex justify-center items-center gap-5 flex-col">
+    @if (!$errorMessage)
+        {{-- Statistics Card --}}
+        <div class=" bg-gray-900 w-full text-gray-100 p-5 md:p-6 rounded-lg shadow-lg relative overflow-hidden">
+            <!-- Futuristic background element -->
+            <div
+                class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 transform rotate-45 translate-x-16 -translate-y-16">
+            </div>
 
-    <div class="grid grid-cols-1 gap-5 w-full">
+            <!-- Impact stats -->
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="bg-gray-800 p-3 rounded-lg">
+                    <p class="text-xs text-gray-400 font-mono">Total People Affected</p>
+                    <p class="text-xl font-bold text-yellow-400 font-mono">
+                        {{ $attacksRes['total_affected_people']}}
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-3 rounded-lg">
+                    <p class="text-xs text-gray-400 font-mono">Total Affected Customers</p>
+                    <p class="text-xl font-bold text-yellow-400 font-mono">
+                        {{ $attacksRes['total_affected_customers']}}
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-3 rounded-lg">
+                    <p class="text-xs text-gray-400 font-mono">Total Affected Employees</p>
+                    <p class="text-xl font-bold text-yellow-400 font-mono">
+                        {{ $attacksRes['total_affected_employees']}}
+                    </p>
+                </div>
+                <div class="bg-gray-800 p-3 rounded-lg">
+                    <p class="text-xs text-gray-400 font-mono">Total 3rd Party Affected</p>
+                    <p class="text-xl font-bold text-yellow-400 font-mono">
+                        {{ $attacksRes['total_affected_third_parties']}}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Futuristic footer element -->
+            <div class="h-1 w-full bg-gradient-to-r from-yellow-500 to-yellow-200 rounded-full"></div>
+        </div>
+    @endif
+
+
+    <h2 class="text-2xl w-full text-start font-bold text-yellow-400 mb-4">Recent Cyber Attacks</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
         @if($errorMessage)
             <h3 class="text-xl font-bold text-center text-red-400 mb-4">{{ $errorMessage }}</h2>
         @endif
+
+
             {{-- Map Attacks --}}
             @foreach($attacks as $attack)
-
                 <div class=" bg-gray-900 w-full text-gray-100 p-5 md:p-6 rounded-lg shadow-lg relative overflow-hidden">
                     <!-- Futuristic background element -->
                     <div
@@ -51,7 +99,7 @@ new class extends Component {
                             <span class="text-sm text-gray-400 font-mono">{{ $attack['date'] }}</span>
                         </div>
                         <h2 class="w-full text-2xl md:text-start font-bold text-yellow-400 underline font-mono">
-                            <a class="w-full" target="_blank" href="{{ $attack['domain'] }}">
+                            <a class="w-full" target="_blank" href="http://{{ $attack['domain'] }}">
                                 {{ $attack['victim'] }}
                             </a>
                         </h2>
