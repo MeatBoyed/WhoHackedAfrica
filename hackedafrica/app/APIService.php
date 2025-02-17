@@ -21,21 +21,31 @@ class APIService
             $response = Http::get($url); // Fetch the Attacks in region
 
             if ($response->successful()) {
+                $attackObjects = [];
                 $attacks = $response->json();
-                // $attacks = json_decode($response->get(), true);
+                $error = count($attacks) === 0 ? $attacks['error'] : '';
+                // dump($attacks);
+                if ($error !== '') {
+                    Log::error($error);
+                    // dd($attacks);
+                    return $attackObjects;
+                }
 
                 // Enrich each attack with victim details
-                // $attackObjects = [];
-                // foreach ($attacks as $attack) {
-                //     $victimData = $this->getVictimData($attack['victim']);
-                //     Log::Info("Collected Victim data - " . $victimData . "" . $attack);
-
-                //     $attack['victim_data'] = $victimData;
-                //     // $attackObjects[] = new AttackModel($attack);
-                // }
+                foreach ($attacks as $attack) {
+                    try {
+                        $victimData = $this->getVictimData($attack['domain']);
+                        $attack['victim_data'] = $victimData;
+                        Log::Info("Collected Victim data - " . $victimData . "" . $attack);
+                        continue;
+                    } catch (\Exception $e) {
+                        $attack['victim_data'] = [];
+                        $attackObjects[] = $attack;
+                    }
+                }
 
                 Log::Info("Collected & Formatted Attack Data");
-                return $attacks;
+                return $attackObjects;
             }
         } catch (\Exception $e) {
             Log::error("Error fetching cyber attacks: " . $e->getMessage());
@@ -53,10 +63,14 @@ class APIService
             $victim = $response->json();
             $err = $victim['error'] === null ? false : true;
 
+            dump($victim);
+
             if ($err) {
-                Log::error('Victim not found: ' . $victim);
+                // Log::error('Victim not found: ' . $victim);
                 return [];
             }
+
+            dump($victim);
 
             return $victim;
         } catch (\Exception $e) {

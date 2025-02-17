@@ -1,0 +1,3 @@
+[submodule "api.ransomware.live"]
+	path = api.ransomware.live
+	url = https://github.com/JMousqueton/api.ransomware.live
