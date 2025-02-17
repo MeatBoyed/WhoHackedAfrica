@@ -31,30 +31,30 @@ new class extends Component {
     <div class="space-y-3 mb-6">
         <p class="font-mono">
             <span class="text-yellow-400">Hacker Group:</span>
-            {{-- <span class="ml-2 text-lg">{{ $attack['hacker_group'] }}</span> --}}
+            <span class="ml-2 text-lg">{{ $attack['hacker_group'] }}</span>
         </p>
-        <p class="font-mono">
-            <span class="text-yellow-400">Compromised Data:</span>
+        {{-- <p class="font-mono"> --}}
+            {{-- <span class="text-yellow-400">Compromised Data:</span> --}}
             {{-- <span class="ml-2">{{ $attack['compromised_data'] }}</span> --}}
-        </p>
+        {{-- </p> --}}
     </div>
 
     <!-- Impact stats -->
     <div class="grid grid-cols-3 gap-4 mb-4">
         <div class="bg-gray-800 p-3 rounded-lg">
             <p class="text-xs text-gray-400 font-mono">Affected Customers</p>
-            {{-- <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['affected_customers'] }}</p>
-            --}}
+            <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['affected_customers'] }}</p>
+           
         </div>
         <div class="bg-gray-800 p-3 rounded-lg">
             <p class="text-xs text-gray-400 font-mono">Affected Employees</p>
-            {{-- <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['affected_employees'] }}</p>
-            --}}
+            <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['affected_employees'] }}</p>
+           
         </div>
         <div class="bg-gray-800 p-3 rounded-lg">
             <p class="text-xs text-gray-400 font-mono">3rd Party Affected</p>
-            {{-- <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['third_party_affected'] }}
-            </p> --}}
+            <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['third_party_affected'] }}
+            </p>
         </div>
     </div>
 

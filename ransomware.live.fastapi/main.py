@@ -34,7 +34,7 @@ app = FastAPI(
     redoc_url=f"{version_prefix}/redoc"
 )
 
-# register_all_errors(app)
+# register_all_errors(app
 
 # register_middleware(app)
 

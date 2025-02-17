@@ -18,7 +18,7 @@ new class extends Component {
             $this->errorMessage = "Oops! Your Country (" . $this->countryCode . ") could not be found. 404";
         }
         // dump($this->attacks[0]);
-        // dd($this->attacks['affected']);
+        dd($this->attacks);
     }
 }; ?>
 
@@ -50,7 +50,7 @@ new class extends Component {
                             @endif
                             <span class="text-sm text-gray-400 font-mono">{{ $attack['date'] }}</span>
                         </div>
-                        <h2 class=" text-2xl md:text-start font-bold text-yellow-400 underline font-mono">
+                        <h2 class="w-full text-2xl md:text-start font-bold text-yellow-400 underline font-mono">
                             <a class="w-full" target="_blank" href="{{ $attack['domain'] }}">
                                 {{ $attack['victim'] }}
                             </a>

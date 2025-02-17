@@ -26,6 +26,12 @@ class APIService
                 return [];
             }
 
+            if ($response->serverError()) {
+                // dd($response);
+                Log::error("Server Error fetching attacks: ");
+                return [];
+            }
+
             Log::Info("Collected & Formatted Attack Data");
             return $response->json();
         } catch (\Exception $e) {

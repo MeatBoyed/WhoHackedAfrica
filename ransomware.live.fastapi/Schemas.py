@@ -47,7 +47,7 @@ class AffectedDetails(BaseModel):
     claim_url: Optional[str] = ""
 
 
-class AttackResponse(BaseModel):
+class AttackDetails(BaseModel):
     date: str
     country: str
     title: str
@@ -58,3 +58,10 @@ class AttackResponse(BaseModel):
     victim: str
     domain: str
     affected: AffectedDetails
+
+class AttackResponse(BaseModel):
+    total_affected_customers: int 
+    total_affected_employees: int 
+    total_affected_third_parties: int 
+    attacks: List[AttackDetails]
+
