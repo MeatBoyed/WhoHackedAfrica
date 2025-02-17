@@ -63,5 +63,7 @@ class AttackResponse(BaseModel):
     total_affected_customers: int 
     total_affected_employees: int 
     total_affected_third_parties: int 
+    total_affected_people: int
     attacks: List[AttackDetails]
+    total_attacks: int
 

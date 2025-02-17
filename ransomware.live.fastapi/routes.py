@@ -132,14 +132,10 @@ async def get_attacks_by_country(
         total_affected_customers=totalAffectedCustomers,
         total_affected_employees=totalAffectedEmployees,
         total_affected_third_parties=totalAffectedThirdparties,
-        attacks=attacks
+        total_affected_people=totalAffectedCustomers + totalAffectedEmployees + totalAffectedThirdparties,
+        attacks=attacks,
+        total_attacks=len(attacks)
     )
-    # return {
-    #     "total_affected_customers":totalAffectedCustomers,
-    #     "total_affected_employees":totalAffectedEmployees,
-    #     "total_affected_third_parties":totalAffectedThirdparties,
-    #     "attacks"attacks
-    # }
 
 
 def extract_short_code(victim_name: str) -> str:
