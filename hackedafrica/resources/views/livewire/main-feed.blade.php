@@ -17,9 +17,8 @@ new class extends Component {
         if (count($this->attacks) === 0) {
             $this->errorMessage = "Oops! Your Country (" . $this->countryCode . ") could not be found. 404";
         }
-        // $this->updatedAttacks = $apiService->getVictim($this->attacks);
         // dump($this->attacks[0]);
-        dump($this->attacks);
+        // dd($this->attacks['affected']);
     }
 }; ?>
 
@@ -37,8 +36,7 @@ new class extends Component {
                 <div class=" bg-gray-900 w-full text-gray-100 p-5 md:p-6 rounded-lg shadow-lg relative overflow-hidden">
                     <!-- Futuristic background element -->
                     <div
-                        class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 
-                                                                                                                        opacity-10 transform rotate-45 translate-x-16 -translate-y-16">
+                        class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 transform rotate-45 translate-x-16 -translate-y-16">
                     </div>
 
                     <!-- Company and timestamp -->
@@ -52,57 +50,60 @@ new class extends Component {
                             @endif
                             <span class="text-sm text-gray-400 font-mono">{{ $attack['date'] }}</span>
                         </div>
-                        <a class="w-full" href="https://{{ $attack['domain'] }}">
-                            <h2 class=" text-2xl md:text-start font-bold text-yellow-400 underline font-mono">
+                        <h2 class=" text-2xl md:text-start font-bold text-yellow-400 underline font-mono">
+                            <a class="w-full" target="_blank" href="{{ $attack['domain'] }}">
                                 {{ $attack['victim'] }}
-                            </h2>
-                        </a>
+                            </a>
+                        </h2>
                     </div>
 
                     <!-- Attack details -->
                     <div class=" space-y-3 mb-6">
-                        <p class="font-mono">
+                        <p class="font-mono flex justify-start items-center flex-col md:flex-row">
                             <span class="text-yellow-400">News Source: </span>
                         <div class="flex justify-start items-center flex-wrap w-full gap-3">
-                            {{-- <p class=""> --}}
-                                {{ $attack['title'] }}
-                                {{--
-                            </p> --}}
-                            <a class="" href="{{ $attack['url'] }}">
+                            {{ $attack['title'] }}
+                            <a class="" target="_blank" href="{{ $attack['article_url'] }}">
                                 {{ svg('feathericon-link', 'w-5') }}
                             </a>
                         </div>
                         </p>
                         <p class="font-mono">
                             <span class="text-yellow-400">Hacker Group:</span>
-                            {{-- <span class="ml-2 text-lg">{{ $attack['hacker_group'] }}</span> --}}
+                            <span class="ml-2 text-lg">{{ $attack['hacker_group'] }}</span>
                         </p>
-                        <p class="font-mono">
+                        {{-- <p class="font-mono">
                             <span class="text-yellow-400">Compromised Data:</span>
-                            {{-- <span class="ml-2">{{ $attack['compromised_data'] }}</span> --}}
-                        </p>
+                            <span class="ml-2">{{ $attack['compromised_data'] }}</span>
+                        </p> --}}
                     </div>
 
                     <!-- Impact stats -->
                     <div class="grid grid-cols-3 gap-4 mb-4">
-                        <div class="bg-gray-800 p-3 rounded-lg">
-                            <p class="text-xs text-gray-400 font-mono">Affected Customers</p>
-                            {{-- <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['affected_customers'] }}
-                            </p>
-                            --}}
-                        </div>
-                        <div class="bg-gray-800 p-3 rounded-lg">
-                            <p class="text-xs text-gray-400 font-mono">Affected Employees</p>
-                            {{-- <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['affected_employees'] }}
-                            </p>
-                            --}}
-                        </div>
-                        <div class="bg-gray-800 p-3 rounded-lg">
-                            <p class="text-xs text-gray-400 font-mono">3rd Party Affected</p>
-                            {{-- <p class="text-xl font-bold text-yellow-400 font-mono">{{ $attack['third_party_affected']
-                                }}
-                            </p> --}}
-                        </div>
+                        @if ($attack['affected']['customers'] !== 0)
+                            <div class="bg-gray-800 p-3 rounded-lg">
+                                <p class="text-xs text-gray-400 font-mono">Affected Customers</p>
+                                <p class="text-xl font-bold text-yellow-400 font-mono">
+                                    {{ $attack['affected']['customers'] }}
+                                </p>
+                            </div>
+                        @endif
+                        @if ($attack['affected']['employees'] !== 0)
+                            <div class="bg-gray-800 p-3 rounded-lg">
+                                <p class="text-xs text-gray-400 font-mono">Affected Employees</p>
+                                <p class="text-xl font-bold text-yellow-400 font-mono">
+                                    {{ $attack['affected']['employees'] }}
+                                </p>
+                            </div>
+                        @endif
+                        @if ($attack['affected']['third_parties'] !== 0)
+                            <div class="bg-gray-800 p-3 rounded-lg">
+                                <p class="text-xs text-gray-400 font-mono">3rd Party Affected</p>
+                                <p class="text-xl font-bold text-yellow-400 font-mono">
+                                    {{ $attack['affected']['third_parties'] }}
+                                </p>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Futuristic footer element -->

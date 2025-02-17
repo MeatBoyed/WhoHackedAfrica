@@ -11,42 +11,23 @@ use App\VictimModel;
 
 class APIService
 {
-    private $baseUrl = "https://api.ransomware.live/v2";
+    private $baseUrl = "http://localhost:8003/api/v1/attacks";
 
     public function getAttacks(string $countryCode): array
     {
-        $url = "$this->baseUrl/countrycyberattacks/$countryCode";
+        $url = "$this->baseUrl/$countryCode";
 
         try {
             $response = Http::get($url); // Fetch the Attacks in region
 
-            if ($response->successful()) {
-                $attackObjects = [];
-                $attacks = $response->json();
-                $error = count($attacks) === 0 ? $attacks['error'] : '';
-                // dump($attacks);
-                if ($error !== '') {
-                    Log::error($error);
-                    // dd($attacks);
-                    return $attackObjects;
-                }
-
-                // Enrich each attack with victim details
-                foreach ($attacks as $attack) {
-                    try {
-                        $victimData = $this->getVictimData($attack['domain']);
-                        $attack['victim_data'] = $victimData;
-                        Log::Info("Collected Victim data - " . $victimData . "" . $attack);
-                        continue;
-                    } catch (\Exception $e) {
-                        $attack['victim_data'] = [];
-                        $attackObjects[] = $attack;
-                    }
-                }
-
-                Log::Info("Collected & Formatted Attack Data");
-                return $attackObjects;
+            if ($response->clientError()) {
+                // dd($response);
+                Log::error("Client Error fetching attacks: ");
+                return [];
             }
+
+            Log::Info("Collected & Formatted Attack Data");
+            return $response->json();
         } catch (\Exception $e) {
             Log::error("Error fetching cyber attacks: " . $e->getMessage());
         }

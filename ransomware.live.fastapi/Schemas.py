@@ -41,15 +41,17 @@ class VictimData(BaseModel):
     url: Optional[str] = None
 
 class AffectedDetails(BaseModel):
-    affected_customers: Optional[int] = ""
-    affected_employees: Optional[int] = ""
-    third_party_affected: Optional[int] = ""
+    customers: Optional[int] = ""
+    employees: Optional[int] = ""
+    third_parties: Optional[int] = ""
     claim_url: Optional[str] = ""
 
 
 class AttackResponse(BaseModel):
     date: str
+    country: str
     title: str
+    article_url: str
     hacker_group: str
     attack_summary: str
     screenshot: Optional[str] = ''

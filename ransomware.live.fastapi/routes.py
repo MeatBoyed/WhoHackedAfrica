@@ -17,6 +17,7 @@ attacks_router = APIRouter()
 async def get_attacks_by_country(
     country_code: str,
 ):
+    print("Processing Request for: ", country_code)
     # Make request  
     response = requests.get(f"https://api.ransomware.live/v2/countrycyberattacks/{country_code}") 
     if (response.status_code == 400):
@@ -26,14 +27,14 @@ async def get_attacks_by_country(
     # Extract Data
     raw_attacks = response.json()
     attacks = raw_attacks[:5] # Slice to get only first 10
+    # print("Fetched Attack: ", attacks[0])
 
     # Get Victim Data
     response = []
-    # try:
+    print("Processing Victims")
     for attack in attacks:
         victim_domain = attack.get("domain")
         victim_name = attack.get("victim")
-        # Extract the code (code)
         victim_code = extract_short_code(victim_name)
 
         victim_res = requests.get(f"https://api.ransomware.live/v2/searchvictims/{victim_code}") # Request Victims data
@@ -47,9 +48,9 @@ async def get_attacks_by_country(
                 response.append({
                     "date": attack["date"],  # Attack date
                     "title": attack['title'], # Hacker group
+                    "article_url": attack["url"],  # Press source link
                     "hacker_group": "",  # Hacker group
                     "attack_summary": attack.get("summary", "N/A"),  # Attack description
-                    # "press_link": "",  # Press source link
                     "screenshot": "",  # Screenshot of attack leak
 
                     "victim": attack["victim"],  # Use attack name from API
@@ -62,13 +63,14 @@ async def get_attacks_by_country(
                     },
                 })
                 affectedDetails = AffectedDetails(
-                    affected_customers="",
-                    affected_employees="",
-                    third_party_affected="",
+                    customers=0,
+                    employees=0,
+                    third_parties=0,
                     claim_url="",
                 )
                 response.append(AttackResponse(
                     date= attack["date"],
+                    country=attack["country"],
                     title=attack["title"],
                     hacker_group="",
                     attack_summary=attack.get("summary", "N/A"),
@@ -81,8 +83,7 @@ async def get_attacks_by_country(
         except Exception as e:
             # Build Response object
             victim_data = victim_res.json()[0]
-            print("Response: ", victim_res)
-            print("Fetched Victim: ", victim_data)
+            # print("Fetched Victim: ", victim_data)
             # response.append({
             #     "date": attack["date"],  # Attack date
             #     "title": attack['title'], # Hacker group
@@ -101,14 +102,16 @@ async def get_attacks_by_country(
             #     },
             # })
             affectedDetails = AffectedDetails(
-                affected_customers=victim_data.get("infostealer", {}).get("users", "N/A"),
-                affected_employees=victim_data.get("infostealer", {}).get("employees", "N/A"),
-                third_party_affected=victim_data.get("infostealer", {}).get("thirdparties", "N/A"),
+                customers=victim_data.get("infostealer", {}).get("users", "N/A"),
+                employees=victim_data.get("infostealer", {}).get("employees", "N/A"),
+                third_parties=victim_data.get("infostealer", {}).get("thirdparties", "N/A"),
                 claim_url=victim_data.get("claim_url", {}),
             )
             response.append(AttackResponse(
                 date= attack["date"],
+                country=attack["country"],
                 title=attack["title"],
+                article_url=attack["url"],
                 hacker_group=victim_data.get("group", "Unknown"),
                 attack_summary=attack.get("summary", "N/A"),
                 screenshot=victim_data.get("screenshot", "N/A"),
@@ -118,6 +121,7 @@ async def get_attacks_by_country(
             ))
             
 
+    print("Returning Collected & Formated Data")
     return response
 
 def extract_short_code(victim_name: str) -> str:
